@@ -322,7 +322,7 @@ class AzureCloudInterface(CloudInterface):
         """
         obj = self.container_client.download_blob(key)
         with open(dest_path, "wb") as dest_file:
-            if not decompress:
+            if decompress is None:
                 obj.download_to_stream(dest_file)
                 return
             blob = StreamingBlobIO(obj)

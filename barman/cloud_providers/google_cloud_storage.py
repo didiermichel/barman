@@ -175,7 +175,7 @@ class GoogleCloudInterface(CloudInterface):
 
         :param str key: The key identifying the file to download
         :param str dest_path: Where to put the destination file
-        :param bool decompress: Whenever to decompress this file or not
+        :param str|None decompress: Compression scheme to use for decompression
         """
         logging.debug("GCS.download_file")
         blob = storage.Blob(key, self.container_client)

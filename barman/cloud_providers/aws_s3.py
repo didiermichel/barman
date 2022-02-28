@@ -251,7 +251,7 @@ class S3CloudInterface(CloudInterface):
         # Write the dest file in binary mode
         with open(dest_path, "wb") as dest_file:
             # If the file is not compressed, just copy its content
-            if not decompress:
+            if decompress is None:
                 shutil.copyfileobj(remote_file, dest_file)
                 return
 
