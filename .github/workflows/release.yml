@@ -4,22 +4,60 @@ on:
   workflow_dispatch:
     inputs:
       release:
-        description: 'barman release (ex: release/2.18)'
+        description: 'barman release (ex: 2.18)'
         required: true
 
 jobs:
-  dispatch:
-    strategy:
-      matrix:
-        repo: ['didiermichel/barman-packaging']
-    name: Trigger barman packaging update
+#  reset_version:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v3
+#      - name: Log the step container node version
+#        uses: docker://node:12.14.1-alpine3.10
+#        with:
+#          entrypoint: usr/local/bin/echo
+#          args: -v
+#      - name: test pandoc
+#        uses: docker:didiermichel/pandoc:latest
+#        with:
+#          entrypoint: /data/scripts/ci-set-version.sh
+#          args: ${{ github.event.inputs.release }}
+
+  set_version:
     runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/didiermichel/pandoc:latest
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.DELIVER_REPO_ACCESS_TOKEN }}
     steps:
-      - name: Repository dispatch
-        uses: peter-evans/repository-dispatch@v2
-        with:
-          # Personal access token to trigger the other pipelines
-          token: ${{ secrets.DELIVER_REPO_ACCESS_TOKEN }}
-          repository: ${{ matrix.repo }}
-          event-type: dispatch_release
-          client-payload: '{"release_name": "${{ github.event.inputs.release }}"}'
+      - name: Checkout
+        uses: actions/checkout@v3
+      - run: |
+          echo `ls ${GITHUB_WORKSPACE}/scripts/ci-set-version.sh`
+      - run: |
+          # maybe chmod +x
+          ${GITHUB_WORKSPACE}/scripts/ci-set-version.sh 2.18
+#          ${GITHUB_WORKSPACE}/scripts/ci-set-version.sh ${{ github.event.inputs.release }}
+#      - run: update documentation
+      - run: git status
+
+
+
+#  dispatch:
+#    needs: release
+#    strategy:
+#      matrix:
+#        repo: ['didiermichel/barman-packaging']
+#    name: Trigger barman packaging update
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Repository dispatch
+#        uses: peter-evans/repository-dispatch@v2
+#        with:
+#          # Personal access token to trigger the other pipelines
+#          token: ${{ secrets.DELIVER_REPO_ACCESS_TOKEN }}
+#          repository: ${{ matrix.repo }}
+#          event-type: dispatch_release
+#          client-payload: '{"release_name": "release/${{ github.event.inputs.release }}"}'
