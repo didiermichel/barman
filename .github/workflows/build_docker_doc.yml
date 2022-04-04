@@ -1,0 +1,19 @@
+name: Build doc docker image
+
+on:
+  push
+
+jobs:
+  build_docker_image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - run: |
+          echo ${{ secrets.DELIVER_REPO_ACCESS_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+      - name: Build Docker image
+        run: docker build . --file doc/Dockerfile --tag ghcr.io/didiermichel/pandoc:0.1
+      - name: Push to registry
+        run: docker push ghcr.io/didiermichel/pandoc:0.1
+
+
