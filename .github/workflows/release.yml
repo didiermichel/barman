@@ -8,21 +8,6 @@ on:
         required: true
 
 jobs:
-#  reset_version:
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Checkout
-#        uses: actions/checkout@v3
-#      - name: Log the step container node version
-#        uses: docker://node:12.14.1-alpine3.10
-#        with:
-#          entrypoint: usr/local/bin/echo
-#          args: -v
-#      - name: test pandoc
-#        uses: docker:didiermichel/pandoc:latest
-#        with:
-#          entrypoint: /data/scripts/ci-set-version.sh
-#          args: ${{ github.event.inputs.release }}
 
   set_version:
     runs-on: ubuntu-latest
@@ -35,13 +20,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - run: |
-          echo `ls ${GITHUB_WORKSPACE}/scripts/ci-set-version.sh`
-      - run: |
-          # maybe chmod +x
-          ${GITHUB_WORKSPACE}/scripts/ci-set-version.sh 2.18
-#          ${GITHUB_WORKSPACE}/scripts/ci-set-version.sh ${{ github.event.inputs.release }}
-#      - run: update documentation
-      - run: git status
+#          ${GITHUB_WORKSPACE}/scripts/ci-set-version.sh 2.18
+          ${GITHUB_WORKSPACE}/scripts/ci-set-version.sh ${{ github.event.inputs.release }}
+      - run: git -C ${GITHUB_WORKSPACE} status
 
 
 
