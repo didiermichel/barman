@@ -12,7 +12,7 @@ jobs:
   set_version:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/didiermichel/pandoc:latest
+      image: ghcr.io/didiermichel/pandoc:0.1
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.DELIVER_REPO_ACCESS_TOKEN }}
