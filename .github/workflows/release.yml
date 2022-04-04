@@ -20,9 +20,24 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - run: |
-#          ${GITHUB_WORKSPACE}/scripts/ci-set-version.sh 2.18
           ${GITHUB_WORKSPACE}/scripts/ci-set-version.sh ${{ github.event.inputs.release }}
-      - run: git -C ${GITHUB_WORKSPACE} status
+#      - run: git -C ${GITHUB_WORKSPACE} status
+      - name: Commit changes
+        uses: EndBug/add-and-commit@v9
+        with:
+          add: '["barman/version.py", "doc/*"]'
+          default_author: github_actions
+          message:  "Version set to ${{ github.event.inputs.release }}"
+          push: true
+
+  update_news:
+    needs: set_version
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+         echo "ok"
+      - run: |
+          git log
 
 
 
