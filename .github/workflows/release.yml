@@ -17,11 +17,15 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.DELIVER_REPO_ACCESS_TOKEN }}
     steps:
+      - name: Run only on master
+        if: ${{ github.ref_name }} != 'dev/add_release'
+#        if: ${{ github.ref_name }} != 'master'
+        run: echo 1
       - name: Checkout
         uses: actions/checkout@v3
-      - run: |
+      - name: Update version in barman.
+        run: |
           ${GITHUB_WORKSPACE}/scripts/ci-set-version.sh ${{ github.event.inputs.release }}
-#      - run: git -C ${GITHUB_WORKSPACE} status
       - name: Commit changes
         uses: EndBug/add-and-commit@v9
         with:
@@ -30,21 +34,35 @@ jobs:
           message:  "Version set to ${{ github.event.inputs.release }}"
           push: true
 
-  update_news:
-    needs: set_version
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "${{ toJSON(github) }}"
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          ref: dev/add_release
-      - run: |
-          git log
+#  news_tag_release:
+#    needs: set_version
+#    runs-on: ubuntu-latest
+#    steps:
+#      - run: echo "${{ toJSON(github) }}"
+#      - name: Checkout
+#        uses: actions/checkout@v3
+#        with:
+#          ref: ${{ github.ref_name }}
+#          # Todo: configurer l'appel a barman deliver
+#      - name: Checkout GitHub Action Repo
+#        uses: actions/checkout@master
+#        with:
+#          repository: didiermichel/barman-deliver.git
+#          ref: main
+#          token: ${{ secrets.DELIVER_REPO_ACCESS_TOKEN}}
+#          path: barman-deliver
+#      - run: echo ${{ github.workspace }}
+#      - name: Update repo with new version ${{ env.release_name }}
+#        uses: ./barman-deliver
+#        with:
+#          command: 'barman'
+#          release: ${{ env.release_name }}
+#          GITHUB_TOKEN: ${{ github.token }}
 
 
 
 #  dispatch:
+## triggers other pipelines in related repositories
 #    needs: release
 #    strategy:
 #      matrix:

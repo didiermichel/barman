@@ -1,8 +1,8 @@
-name: Build doc docker image
+name: Build documentation docker image
 
 on:
   push:
-    path:
+    paths:
       - 'doc/Dockerfile'
 
 jobs:
@@ -12,12 +12,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Set Tag
-        run: echo "tag:latest" >> $GITHUB_ENV
+        run: echo "docker_tag=latest" >> $GITHUB_ENV
       - run: |
           echo ${{ secrets.DELIVER_REPO_ACCESS_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
       - name: Build Docker image
-        run: docker build . --file doc/Dockerfile --tag ghcr.io/didiermichel/pandoc:${{ env.tag }}
+        run: docker build . --file doc/Dockerfile --tag ghcr.io/didiermichel/pandoc:${{ env.docker_tag }}
       - name: Push to registry
-        run: docker push ghcr.io/didiermichel/pandoc:${{ env.tag }}
+        run: docker push ghcr.io/didiermichel/pandoc:${{ env.docker_tag }}
 
 
