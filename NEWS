@@ -1,8 +1,14 @@
 Barman News - History of user-visible changes
 Unreleased:
-    Features: []
-    BugFixes: []
-    AdditionalContributors: []
+    Features:
+      - Add beautiful feature
+      - snapshot support
+    BugFixes:
+      - fix all bugs
+      - There is no more bug
+    AdditionalContributors:
+      - foo
+      - bar
 
 Version 2.19 - 9 March 2022
 
