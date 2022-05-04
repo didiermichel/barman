@@ -12,7 +12,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Set Tag
-        run: echo "docker_tag=latest" >> $GITHUB_ENV
+        run: echo "docker_tag=2.2.1" >> $GITHUB_ENV
       - run: |
           echo ${{ secrets.DELIVER_REPO_ACCESS_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
       - name: Build Docker image
