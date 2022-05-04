@@ -17,11 +17,20 @@ jobs:
         password: ${{ secrets.DELIVER_REPO_ACCESS_TOKEN }}
     steps:
       - name: Run only on master
-        if: ${{ github.ref_name }} != 'dev/add_release'
-#        if: ${{ github.ref_name }} != 'master'
-        run: echo 1
+        if: github.ref_name != 'dev/add_release'
+        run: exit 1
       - name: Checkout
         uses: actions/checkout@v3
+      - name: Check tag not already exits for ${{ github.event.inputs.release }}
+        shell: bash
+        run: |
+          git fetch origin 'refs/tags/*:refs/tags/*'
+          tag_search=`git tag -l "release/${{ github.event.inputs.release }}"`
+          if [[ "$tag_search" ]]
+          then
+            echo "tag $tag_search already exist."
+            exit 1
+          fi
       - name: Update version in barman.
         run: |
           ${GITHUB_WORKSPACE}/scripts/ci-set-version.sh ${{ github.event.inputs.release }}
