@@ -1,14 +1,22 @@
 Barman News - History of user-visible changes
 Unreleased:
-    Features:
-      - Add beautiful feature
-      - snapshot support
-    BugFixes:
-      - fix all bugs
-      - There is no more bug
-    AdditionalContributors:
-      - foo
-      - bar
+    Features: []
+    BugFixes: []
+    AdditionalContributors: []
+
+Version 2.56 - 05 May 2022
+
+- Add beautiful feature
+
+- snapshot support
+
+- Bug fixes:
+
+    - fix all bugs
+
+    - There is no more bug
+
+- We thank foo and bar for their contributions to this release.
 
 Version 2.19 - 9 March 2022
 
