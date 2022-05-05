@@ -21,9 +21,14 @@ jobs:
         run: exit 1
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Check tag not already exits for ${{ github.event.inputs.release }}
+      - name: Check version '${{ github.event.inputs.release }}' is valid and tag does not already exits
         shell: bash
         run: |
+          if [[ -z "$(echo ${{ github.event.inputs.release }} | grep -E "^[1-9]\.[0-9]+$")" ]]
+          then
+            echo "wrong pattern for version"
+            exit 1
+          fi
           git fetch origin 'refs/tags/*:refs/tags/*'
           tag_search=`git tag -l "release/${{ github.event.inputs.release }}"`
           if [[ "$tag_search" ]]
